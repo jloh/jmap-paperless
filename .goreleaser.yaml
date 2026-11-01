@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+builds:
+  - env: [CGO_ENABLED=0]
+    goos: [linux, darwin]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags: [-s -w]
+
+archives:
+  - formats: [tar.gz]
+
+dockers_v2:
+  - images: [ghcr.io/jloh/jmap-paperless]
+    tags: ["{{ .Version }}", latest]
+    platforms: [linux/amd64, linux/arm64]
+    labels:
+      org.opencontainers.image.title: "{{ .ProjectName }}"
+      org.opencontainers.image.description: Upload email attachments from a JMAP label to paperless-ngx
+      org.opencontainers.image.source: https://github.com/jloh/jmap-paperless
+      org.opencontainers.image.url: https://github.com/jloh/jmap-paperless
+      org.opencontainers.image.version: "{{ .Version }}"
+      org.opencontainers.image.revision: "{{ .FullCommit }}"
+      org.opencontainers.image.created: "{{ .Date }}"
+      org.opencontainers.image.licenses: MIT
+
+changelog:
+  groups:
+    - title: Features
+      regexp: ^.*?feat(\([[:word:]]+\))??!?:.+$
+      order: 0
+    - title: Fixes
+      regexp: ^.*?fix(\([[:word:]]+\))??!?:.+$
+      order: 1
+    - title: Documentation
+      regexp: ^.*?docs?(\([[:word:]]+\))??!?:.+$
+      order: 2
+    - title: Other
+      order: 999
+  filters:
+    exclude:
+      - ^.*?chore(\(.*\))??!?:.+$

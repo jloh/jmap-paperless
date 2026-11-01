@@ -1,0 +1,18 @@
+[settings]
+lockfile = true
+
+[tools]
+go = "1.27.3"
+goreleaser = "2.19.0"
+
+[env]
+_.file = { path = ".env", redact = true }
+
+[tasks.test]
+run = "go vet ./... && go test ./..."
+
+[tasks.build]
+run = "go build -o bin/jmap-paperless ."
+
+[tasks.run]
+run = "go run ."
